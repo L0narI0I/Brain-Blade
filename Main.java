@@ -21,6 +21,12 @@ class Main extends Program {
         }
     }
 
+
+    int playerAttack(Player player, Monstre monstre){
+        double rd = random(0.85,1.15);
+        double dmg = dmgxbuffDmg/(Monster.defense*Monstre.buffDef)*(rd);
+    }
+
     void algorithm() {
         print(CLEAR);
         afficherAsciiArt("MainScreen");
