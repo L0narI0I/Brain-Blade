@@ -1,4 +1,5 @@
 import extensions.File;
+import extensions.CSVFile;
 class Main extends Program {
 
     final String CLEAR = "\033[H\033[2J";
@@ -26,10 +27,25 @@ class Main extends Program {
 //---------------Fonction Utilitaires---------------//
     
     void afficherAsciiArt(String name_file){
-        File file = newFile("/home/infoetu/arthur.calande.etu/ijava2/BB/Assets/"+name_file+".txt");
+        File file = newFile("~/ijava2/BB/Assets/"+name_file+".txt");
         while (ready(file)){
             println(readLine(file));
         }
+    }
+
+    String controleSaisie(String[] possibilite){
+        String saisie;
+        boolean valide = false;
+        do{
+            print("Entrez votre choix");
+            saisie = readInt();
+            for (int i=0 ; i<length(possibilite) ; i++){
+                if(saisie == possibilite[i]){
+                    saisie = true;
+                }
+            }
+        }while (valide);
+        return saisie;
     }
 
 //---------------Fonction de combat---------------//
