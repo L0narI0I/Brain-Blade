@@ -62,9 +62,18 @@ class Main extends Program {
 
 //---------------Fonction de combat---------------//
     int playerAttack(Player player, Monstre monstre){
-        
+        double crit = random(0,1);
         double rd = random(0.85,1.15);
+        if (crit < player.txCrit){
+            rd += 2;
+        }
         double dmg = dmgxbuffDmg/(Monster.defense*Monstre.buffDef)*(rd);
+    }
+
+    int damage(Player player){
+    }
+
+    int damege(Monstre monstre){
     }
 
 //---------------Fonction de Quizz---------------//
