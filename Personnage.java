@@ -1,4 +1,4 @@
-class Personnage {
+class Player {
     int HPmax = 40;
     int HPcurrent = HPmax;
     double defense = 10;
