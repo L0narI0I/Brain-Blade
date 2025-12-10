@@ -8,5 +8,5 @@ class Player {
     double txCrit = 0.25;
     double degCrit = 1.5;
     double buffCrit = 1;
-    int vitesse = 10;
+    Int vitesse = 10;
 }
