@@ -8,12 +8,12 @@ class Main extends Program {
     
 //---------------Constructeur de Classe---------------//
     
-    Monster newMonster(int HP, int def, int degat, int speed, String type){
-        Monster newMonster = new Monster();
+    Monstre newMonstre(int HP, int def, int degat, int speed, String type){
+        Monstre newMonster = new Monstre();
         newMonster.HPmax = HP;
         newMonster.HPcurrent = HP;
-        newMonster.defense = def;
-        newMonster.dps = degat;
+        newMonster.def = def;
+        newMonster.dmg = degat;
         newMonster.vitesse = speed;
         newMonster.categorie = type;
         return newMonster;
@@ -27,33 +27,39 @@ class Main extends Program {
 
 //---------------Fonction Utilitaires---------------//
     
-    String toStringAsciiArt(String name_file){
-        String img = "";
-        File file = newFile("~/ijava2/BB/Assets/"+name_file+".txt");
+    void afficherAsciiArt(String name_file){
+        File file = newFile("./Assets/"+name_file);
         while (ready(file)){
-            img += readLine(file) + "\n";
+            println(readLine(file));
         }
-        return img;
+    }    
+
+    void afficherStat(Player player){
+        println("Vos Statistiques : ");
+        println("   - Point de Vie : " + player.HPcurrent + "/" + player.HPmax);
+        println("   - Degat : "+player.dmg + "  x Buffs Degat : " +player.buffDmg);
+        println("   - Defense : "+player.def + "  x Buffs Defense : " +player.buffDef);
+        println("   - Vitesse : "+player.vitesse);
+        println("   - Taux Coup Critique : x"+player.txCrit + " Degats Critique : " +player.degCrit);
     }
 
-    String toStringMultiAsciiArt(String name_file1, String name_file2){
-        File file1 = newFile("~/ijava2/BB/Assets/"+name_file1+".txt");
-        File file2 = newFile("~/ijava2/BB/Assets/"+name_file2+".txt");
-        String img = "";
-        while (ready(file1) && ready(file2)) {
-            img += readLine(file1) + "\t" + readLine(file2) + "\n";
-        }
-        return img;
-    }      
+    void afficherStat(Monstre monstre){
+        println("Ces Statistiques : ");
+        println("   - Point de Vie : " + monstre.HPcurrent + "/" + monstre.HPmax);
+        println("   - Degat : "+monstre.dmg + "  x Buffs Degat : " +monstre.buffDmg);
+        println("   - Defense : "+monstre.def + "  x Buffs Defense : " +monstre.buffDef);
+        println("   - Vitesse : "+monstre.vitesse);
+        println("   - Taux Coup Critique : x"+monstre.txCrit + " Degats Critique : " +monstre.degCrit);
+    }
 
     String controleSaisie(String[] possibilite){
-        String saisie;
+        String saisie = "";
         boolean valide = false;
         do{
-            print("Entrez votre choix");
+            print(">>>  ");
             saisie = readString();
             for (int i=0 ; i<length(possibilite) ; i++){
-                if(saisie == possibilite[i]){
+                if(equals(saisie , possibilite[i])){
                     valide = true;
                 }
             }
@@ -62,23 +68,41 @@ class Main extends Program {
     }
 
 //---------------Fonction de combat---------------//
-    double playerAttack(Player player, Monster monster){
-        
-        double rd = random(80,115);
-        rd = rd/100;
-        //return (Player.dmg*Player.buffDmg)/(Monster.defense*Monster.buffDef)*(rd);
-        return rd;
+    void playerAttack(Player player, Monstre monstre){
+        double crit = random(0,1);
+        double rd = random(85,115) / 100;
+        if (crit < player.txCrit){
+            rd += 2;
+        }
+        double dmg = (player.dmg*player.buffDmg)/(monstre.def*monstre.buffDef)*rd;
+    }
+
+    void damage(Player player){
+    }
+
+    void damage(Monstre monstre){
+    }
+
+    void afficherAnnonceCombat(Player player, Monstre monstre){
+        println("Votre personnage : ");
+        afficherAsciiArt("Character.txt");
+        afficherStat(player);
+        afficherAsciiArt("VS.txt");
+        afficherAsciiArt("monstre1.txt");
+        afficherStat(monstre);
     }
 
 //---------------Fonction de Quizz---------------//
 
 //---------------Boucle Principale---------------//
-
     void algorithm() {
         print(CLEAR);
-        print(toStringAsciiArt("MainScreen"));
-        while (true){
-            
+        afficherAsciiArt("MainScreen.txt");
+        Player player = newPlayer();
+        Monstre monstre1 = newMonstre(20,10,20,15,"Volant");
+        String choixmenu = controleSaisie(new String[]{"1","2","3"});
+        if(equals(choixmenu,"1")){
+            afficherAnnonceCombat(player,monstre1);
         }
     }
 }
