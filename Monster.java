@@ -1,4 +1,4 @@
-class Monstre {
+class Monster {
     int HPmax;
     int HPcurrent;
     int defense;

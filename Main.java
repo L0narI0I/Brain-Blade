@@ -1,4 +1,4 @@
-Cimport extensions.File;
+import extensions.File;
 import extensions.CSVFile;
 class Main extends Program {
 
@@ -8,8 +8,8 @@ class Main extends Program {
     
 //---------------Constructeur de Classe---------------//
     
-    Monstre newMonstre(int HP, int def, int degat, int speed, String type){
-        Monstre newMonster = new Monstre();
+    Monster newMonster(int HP, int def, int degat, int speed, String type){
+        Monster newMonster = new Monster();
         newMonster.HPmax = HP;
         newMonster.HPcurrent = HP;
         newMonster.defense = def;
@@ -21,14 +21,15 @@ class Main extends Program {
 
     Player newPlayer(){
         Player newPlayer = new Player();
+        return newPlayer;
     } 
 
 
 //---------------Fonction Utilitaires---------------//
     
     String toStringAsciiArt(String name_file){
+        String img = "";
         File file = newFile("~/ijava2/BB/Assets/"+name_file+".txt");
-        String img;
         while (ready(file)){
             img += readLine(file) + "\n";
         }
@@ -38,7 +39,7 @@ class Main extends Program {
     String toStringMultiAsciiArt(String name_file1, String name_file2){
         File file1 = newFile("~/ijava2/BB/Assets/"+name_file1+".txt");
         File file2 = newFile("~/ijava2/BB/Assets/"+name_file2+".txt");
-        String img;
+        String img = "";
         while (ready(file1) && ready(file2)) {
             img += readLine(file1) + "\t" + readLine(file2) + "\n";
         }
@@ -53,7 +54,7 @@ class Main extends Program {
             saisie = readString();
             for (int i=0 ; i<length(possibilite) ; i++){
                 if(saisie == possibilite[i]){
-                    saisie = true;
+                    valide = true;
                 }
             }
         }while (!valide);
@@ -61,10 +62,12 @@ class Main extends Program {
     }
 
 //---------------Fonction de combat---------------//
-    int playerAttack(Player player, Monstre monstre){
+    double playerAttack(Player player, Monster monster){
         
-        double rd = random(0.85,1.15);
-        double dmg = dmgxbuffDmg/(Monster.defense*Monstre.buffDef)*(rd);
+        double rd = random(80,115);
+        rd = rd/100;
+        //return (Player.dmg*Player.buffDmg)/(Monster.defense*Monster.buffDef)*(rd);
+        return rd;
     }
 
 //---------------Fonction de Quizz---------------//
@@ -73,7 +76,7 @@ class Main extends Program {
 
     void algorithm() {
         print(CLEAR);
-        printt(toStringrAsciiArt("MainScreen"));
+        print(toStringAsciiArt("MainScreen"));
         while (true){
             
         }
