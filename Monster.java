@@ -2,11 +2,11 @@ class Monstre {
     int HPmax;
     int HPcurrent;
     int def;
-    double buffDef = 1;
+    double buffDef;
     int dmg;
-    double buffDmg = 1;
-    double txCrit = 0.25;
-    double degCrit = 1.5;
+    double buffDmg;
+    double txCrit;
+    double degCrit;
     int vitesse;
-    String categorie;
+    String type;
 }

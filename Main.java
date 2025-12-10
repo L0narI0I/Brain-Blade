@@ -4,19 +4,20 @@ class Main extends Program {
 
     final String CLEAR = "\033[H\033[2J";
     String currentMonster = "";
-    Player player = newPlayer(); 
+    Player player = newPlayer();
+
     
 //---------------Constructeur de Classe---------------//
-    
+
     Monstre newMonstre(int HP, int def, int degat, int speed, String fichier){
-        Monstre newMonster = new Monstre();
-        newMonster.HPmax = HP;
-        newMonster.HPcurrent = HP;
-        newMonster.def = def;
-        newMonster.dmg = degat;
-        newMonster.vitesse = speed;
-        newMonster.fichier = fichier;
-        return newMonster;
+        Monstre newMonstre = new Monstre();
+        newMonstre.HPmax = HP;
+        newMonstre.HPcurrent = HP;
+        newMonstre.def = def;
+        newMonstre.dmg = degat;
+        newMonstre.vitesse = speed;
+        newMonstre.fichier = fichier;
+        return newMonstre;
     }
 
     Player newPlayer(){
@@ -24,8 +25,7 @@ class Main extends Program {
         return newPlayer;
     } 
 
-
-//---------------Fonction Utilitaires---------------//
+//---------------Fonction Utilitaires------------//
 
     void toString(Player player){
         afficherAsciiArt("Character.txt");
@@ -82,7 +82,7 @@ class Main extends Program {
         return saisie;
     }
 
-//---------------Fonction de combat---------------//
+//---------------Fonction de combat--------------//
     void playerAttack(Player player, Monstre monstre){
         double crit = random();
         double rd = random(85,115);
@@ -96,7 +96,7 @@ class Main extends Program {
         println("PV du monstre restants"+monstre.HPcurrent);
     }
 
-    void monsterAttack(Monstre monstre, Player player){
+    void monstreAttack(Monstre monstre, Player player){
         double crit = random();
         double rd = random(85,115);
         rd = rd/100;
@@ -140,6 +140,21 @@ class Main extends Program {
     }
 
 //---------------Fonction de Quizz---------------//
+
+
+
+
+//-------Gestion des statistiques monstres-------//
+
+//   --> Ici toutes les fonctions pour les
+//       les stats des montres qui évoluront.
+
+
+    Monstre monstreBaseStats(String type){
+        Monstre m = newMonstre();
+        for(int i = 1; i<columnCount())
+    }
+
 
 
 
