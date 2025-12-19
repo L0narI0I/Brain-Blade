@@ -139,6 +139,25 @@ class Main extends Program {
         println("");
     }
 
+    boolean executionCombat(Player player){
+        Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
+        do{
+            toString(player);
+            String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
+            if(equals(s,"1")){
+                println("Vous attaquez le monstre !");
+                playerAttack(player,monstre);
+                println("\n"+"Le monstre riposte !");
+                monsterAttack(monstre1,player);
+            }
+            if
+            println("Vous avez mis le monstre KO");
+        }while (!estKO(monstre) && !estKO(player));
+        if (estKO(monstre)){
+            println("Vous avez mis le monstre KO");
+        }
+    }
+
 //---------------Fonction de Quizz---------------//
 
 
@@ -164,21 +183,12 @@ class Main extends Program {
         print(CLEAR);
         afficherAsciiArt("MainScreen.txt");
         Player player = newPlayer();
-        Monstre monstre1 = newMonstre(20,10,20,15,"monstre1.txt");
         String choixmenu = controleSaisie(new String[]{"1","2","3"}, "");
-        if(equals(choixmenu,"1")){
-            do{
-                toString(player);
-                String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
-                if(equals(s,"1")){
-                    println("Vous attaquez le monstre !");
-                    playerAttack(player,monstre1);
-                    println("\n"+"Le monstre riposte !");
-                    monsterAttack(monstre1,player);
-                }
-            }while (!estKO(monstre1)); 
-
-        println("Vous avez mis le monstre KO");
+        if(equals(choixmenu,"1"));
+            while(enJeu){
+                executionCombat(player);
+            }
+        }
         }else if(equals(choixmenu,"2")){
             afficherAnnonceCombat(player,monstre1);
         }
