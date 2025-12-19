@@ -83,6 +83,7 @@ class Main extends Program {
     }
 
 //---------------Fonction de combat--------------//
+    
     void playerAttack(Player player, Monstre monstre){
         double crit = random();
         double rd = random(85,115);
@@ -139,7 +140,7 @@ class Main extends Program {
         println("");
     }
 
-    boolean executionCombat(Player player){
+    boolean executionCombat(Player player, int score){
         Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
         afficherAsciiArt(StartCombat.txt);
         do{
@@ -151,11 +152,14 @@ class Main extends Program {
                 println("\n"+"Le monstre riposte !");
                 monsterAttack(monstre1,player);
             }
-            if
-            println("Vous avez mis le monstre KO");
         }while (!estKO(monstre) && !estKO(player));
         if (estKO(monstre)){
             println("Vous avez mis le monstre KO");
+            println("Votre score : " + score);
+            return true;
+        }else{
+            println("Le monstre vous a battu, FIN DE LA PARTIE");
+            return false; 
         }
     }
 
@@ -187,7 +191,7 @@ class Main extends Program {
         String choixmenu = controleSaisie(new String[]{"1","2","3"}, "");
         if(equals(choixmenu,"1"));
             while(enJeu){
-                executionCombat(player);
+                enJeu = executionCombat(player);
             }
         }
         }else if(equals(choixmenu,"2")){
