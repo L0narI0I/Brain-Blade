@@ -165,7 +165,10 @@ class Main extends Program {
 
 //---------------Fonction de Quizz---------------//
 
-
+    boolean executionQuestion(player) {
+        afficherAsciiArt(StartQuizz.txt);
+        return true;
+    }
 
 
 //-------Gestion des statistiques monstres-------//
