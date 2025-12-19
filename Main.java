@@ -141,6 +141,7 @@ class Main extends Program {
 
     boolean executionCombat(Player player){
         Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
+        afficherAsciiArt(StartCombat.txt);
         do{
             toString(player);
             String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
