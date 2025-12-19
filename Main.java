@@ -190,8 +190,8 @@ class Main extends Program {
         return q;
     }
 
-    int afficherQuestion(Question q){
-        String[] reponsesPossibles
+    boolean afficherQuestion(Question q){
+        String[] reponsesPossibles = new String[1,2,3,4];
         println("QUESTION :")
         println(q.question);
         println("");
@@ -201,7 +201,12 @@ class Main extends Program {
         println("3 : " + q.answer3);
         println("4 : " + q.answer4);
 
-        controleSaisie()
+        String reponse = controleSaisie(reponsesPossibles,"Veuillez entrer votre réponse ");
+        if(reponse = q.correctAnswer){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 //-------Gestion des statistiques monstres-------//

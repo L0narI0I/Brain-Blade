@@ -6,7 +6,7 @@ class Question{
     String answer3;
     String answer4;
 
-    int correctAnswer;
+    String correctAnswer;
 
-    int difficulty;
+    String difficulty;
 }
