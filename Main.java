@@ -143,6 +143,8 @@ class Main extends Program {
     boolean executionCombat(Player player, int score){
         Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
         afficherAsciiArt(StartCombat.txt);
+        println("");
+        afficherAnnonceCombat(player,monstre);
         do{
             toString(player);
             String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
@@ -165,7 +167,7 @@ class Main extends Program {
 
 //---------------Fonction de Quizz---------------//
 
-    int executionQuestion(player) {
+    int executionQuestion(Player player) {
         afficherAsciiArt(StartQuizz.txt);
         
         Question q = newQuestionRandom();
@@ -197,8 +199,8 @@ class Main extends Program {
     }
 
     boolean afficherQuestion(Question q){
-        String[] reponsesPossibles = new String[1,2,3,4];
-        println("QUESTION :")
+        String[] reponsesPossibles = new String[]{1,2,3,4};
+        println("QUESTION :");
         println(q.question);
         println("");
 
@@ -219,14 +221,6 @@ class Main extends Program {
 
 //   --> Ici toutes les fonctions pour les
 //       les stats des montres qui évoluront.
-
-
-    Monstre monstreBaseStats(String type){
-        Monstre m = newMonstre();
-        for(int i = 1; i<columnCount())
-    }
-
-
 
 
 //---------------Boucle Principale---------------//
