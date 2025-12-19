@@ -192,6 +192,8 @@ class Main extends Program {
         if(equals(choixmenu,"1"));
             while(enJeu){
                 enJeu = executionCombat(player);
+                print(CLEAR);
+                enJeu = executionQuestion(player);
             }
         }
         }else if(equals(choixmenu,"2")){
