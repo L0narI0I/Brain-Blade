@@ -152,7 +152,7 @@ class Main extends Program {
                 println("Vous attaquez le monstre !");
                 playerAttack(player,monstre);
                 println("\n"+"Le monstre riposte !");
-                monsterAttack(monstre1,player);
+                monstreAttack(monstre,player);
             }
         }while (!estKO(monstre) && !estKO(player));
         if (estKO(monstre)){
@@ -168,7 +168,7 @@ class Main extends Program {
 //---------------Fonction de Quizz---------------//
 
     int executionQuestion(Player player) {
-        afficherAsciiArt(StartQuizz.txt);
+        afficherAsciiArt("StartQuizz.txt");
         
         Question q = newQuestionRandom();
         if(afficherQuestion(q) == true){
@@ -180,7 +180,7 @@ class Main extends Program {
 
     Question newQuestionRandom(){
         
-        LoadCSV(question.csv,',');
+        loadCSV(question.csv,',');
         Question q = new Question();
         int rd = random(1,20);
 
@@ -199,7 +199,7 @@ class Main extends Program {
     }
 
     boolean afficherQuestion(Question q){
-        String[] reponsesPossibles = new String[]{1,2,3,4};
+        String[] reponsesPossibles = new String[]{"1","2","3","4"};
         println("QUESTION :");
         println(q.question);
         println("");
@@ -210,7 +210,7 @@ class Main extends Program {
         println("4 : " + q.answer4);
 
         String reponse = controleSaisie(reponsesPossibles,"Veuillez entrer votre réponse ");
-        if(reponse = q.correctAnswer){
+        if(equals(reponse,q.correctAnswer)){
             return true;
         }else{
             return false;
@@ -236,9 +236,8 @@ class Main extends Program {
                 print(CLEAR);
                 enJeu = executionQuestion(player);
             }
-        }
         }else if(equals(choixmenu,"2")){
-            afficherAnnonceCombat(player,monstre1);
+    
         }
     }
 }
