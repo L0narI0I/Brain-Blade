@@ -170,6 +170,39 @@ class Main extends Program {
         return true;
     }
 
+    Question newQuestionRandom(){
+        
+        LoadCSV(question.csv,',');
+        Question q = new Question();
+        int rd = random(1,20);
+
+        q.question = getCell(question.csv, rd, 0);
+
+        q.answer1 = getCell(question.csv, rd, 1);
+        q.answer2 = getCell(question.csv, rd, 2);
+        q.answer3 = getCell(question.csv, rd, 3);
+        q.answer4 = getCell(question.csv, rd, 4);
+
+        q.correctAnswer = getCell(question.csv, rd, 5);
+
+        q.difficulty = getCell(question.csv, rd, 6);
+
+        return q;
+    }
+
+    int afficherQuestion(Question q){
+        String[] reponsesPossibles
+        println("QUESTION :")
+        println(q.question);
+        println("");
+
+        println("1 : " + q.answer1);
+        println("2 : " + q.answer2);
+        println("3 : " + q.answer3);
+        println("4 : " + q.answer4);
+
+        controleSaisie()
+    }
 
 //-------Gestion des statistiques monstres-------//
 
