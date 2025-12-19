@@ -8,5 +8,5 @@ class Question{
 
     String correctAnswer;
 
-    String difficulty;
+    int difficulty;
 }

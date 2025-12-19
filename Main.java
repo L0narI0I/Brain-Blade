@@ -165,9 +165,15 @@ class Main extends Program {
 
 //---------------Fonction de Quizz---------------//
 
-    boolean executionQuestion(player) {
+    int executionQuestion(player) {
         afficherAsciiArt(StartQuizz.txt);
-        return true;
+        
+        Question q = newQuestionRandom();
+        if(afficherQuestion(q) == true){
+            return q.difficulty;
+        }else{
+            return 0;
+        }
     }
 
     Question newQuestionRandom(){
