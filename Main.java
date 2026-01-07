@@ -128,15 +128,16 @@ class Main extends Program {
     }
 
     void afficherAnnonceCombat(Player player, Monstre monstre){
-        println("");
-        println("Votre personnage : ");
-        toStringPlayer(player);
-        sleep(500);
-        afficherAsciiArt("VS.txt");
-        sleep(500);
-        toStringMonstre(monstre);
-        println("");
+        File file_character = newFile("./Assets/Character.txt");
+        File file_VS = newFile("./Assets/VS.txt");
+        File file_monstre = newFile("./Assets/" + monstre.fichier);
+        String annonce = "";
+        while (ready(file_VS)){
+            annonce += readLine(file_character) + readLine(file_VS) + readLine(file_monstre) + "\n";
+        }
+        println(annonce);
     }
+
 
     boolean executionCombat(Player player, int score){
         Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
