@@ -23,16 +23,16 @@ class Main extends Program {
     Player newPlayer(){
         Player newPlayer = new Player();
         return newPlayer;
-    } 
+    }
 
 //---------------Fonction Utilitaires------------//
 
-    void toString(Player player){
+    void toStringPlayer(Player player){
         afficherAsciiArt("Character.txt");
         println("Vos Points de vie : " + player.HPcurrent + "/" + player.HPmax + "  Vos Degat : " + player.dmg*player.buffDmg);
     }
 
-    void toString(Monstre monstre){
+    void toStringMonstre(Monstre monstre){
         afficherAsciiArt(monstre.fichier);
         println("Points de vie : " + monstre.HPcurrent + "/" + monstre.HPmax + "  Degat : " + monstre.dmg*monstre.buffDmg);
     }
@@ -86,13 +86,12 @@ class Main extends Program {
     
     void playerAttack(Player player, Monstre monstre){
         double crit = random();
-        double rd = random(85,115);
-        rd = rd/100;
+        double rd = random(85,115)/100.0;
         if ( crit < player.txCrit){
             println("VOUS INFLIGER UN COUP CRITIQUE !!!");
             rd += 2;
         }
-        double dmg =(int)((player.dmg*player.buffDmg)/(monstre.def*monstre.buffDef) * rd * 5) + 1;
+        double dmg = (int)((player.dmg*player.buffDmg)/(monstre.def*monstre.buffDef) * rd * 5) + 1;
         damage(monstre, dmg);
         println("PV du monstre restants"+monstre.HPcurrent);
     }
@@ -101,7 +100,6 @@ class Main extends Program {
         double crit = random();
         double rd = random(85,115);
         rd = rd/100;
-        println(""+crit);
         if ( crit < monstre.txCrit){
             println("Le monstre se decahine et vous inflige un COUP CRITIQUE !");
             rd += 2;
@@ -113,12 +111,12 @@ class Main extends Program {
 
     void damage(Player player, double amount){
         player.HPcurrent -= amount;
-        println("Dégâts reçus : "+amount);
+        println("Dégâts reçus : "+amount+"\n");
     }
 
     void damage(Monstre monstre, double amount){
         monstre.HPcurrent -= amount;
-        println("Dégâts infligés : "+amount);
+        println("Dégâts infligés : "+amount+"\n");
     }
 
     boolean estKO(Monstre monstre){
@@ -132,21 +130,22 @@ class Main extends Program {
     void afficherAnnonceCombat(Player player, Monstre monstre){
         println("");
         println("Votre personnage : ");
-        afficherAsciiArt("Character.txt");
-        afficherStat(player);
+        toStringPlayer(player);
+        sleep(500);
         afficherAsciiArt("VS.txt");
-        afficherAsciiArt("monstre1.txt");
-        afficherStat(monstre);
+        sleep(500);
+        toStringMonstre(monstre);
         println("");
     }
 
     boolean executionCombat(Player player, int score){
         Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
-        afficherAsciiArt(StartCombat.txt);
+        print(CLEAR);
+        afficherAsciiArt("StartCombat.txt");
+        sleep(800);
         println("");
         afficherAnnonceCombat(player,monstre);
         do{
-            toString(player);
             String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
             if(equals(s,"1")){
                 println("Vous attaquez le monstre !");
@@ -167,33 +166,33 @@ class Main extends Program {
 
 //---------------Fonction de Quizz---------------//
 
-    int executionQuestion(Player player) {
+    boolean executionQuestion(Player player) {
         afficherAsciiArt("StartQuizz.txt");
         
         Question q = newQuestionRandom();
         if(afficherQuestion(q) == true){
-            return q.difficulty;
+            return true;
         }else{
-            return 0;
+            return false;
         }
     }
 
     Question newQuestionRandom(){
         
-        loadCSV(question.csv,',');
+        CSVFile tab = loadCSV("questions.csv",',');
         Question q = new Question();
         int rd = random(1,20);
 
-        q.question = getCell(question.csv, rd, 0);
+        q.question = getCell(tab, rd, 0);
 
-        q.answer1 = getCell(question.csv, rd, 1);
-        q.answer2 = getCell(question.csv, rd, 2);
-        q.answer3 = getCell(question.csv, rd, 3);
-        q.answer4 = getCell(question.csv, rd, 4);
+        q.answer1 = getCell(tab, rd, 1);
+        q.answer2 = getCell(tab, rd, 2);
+        q.answer3 = getCell(tab, rd, 3);
+        q.answer4 = getCell(tab, rd, 4);
 
-        q.correctAnswer = getCell(question.csv, rd, 5);
+        q.correctAnswer = getCell(tab, rd, 5);
 
-        q.difficulty = getCell(question.csv, rd, 6);
+        q.difficulty = getCell(tab, rd, 6);
 
         return q;
     }
@@ -229,15 +228,16 @@ class Main extends Program {
         print(CLEAR);
         afficherAsciiArt("MainScreen.txt");
         Player player = newPlayer();
+        int score = 0;
         String choixmenu = controleSaisie(new String[]{"1","2","3"}, "");
-        if(equals(choixmenu,"1"));
+        if(equals(choixmenu,"1")){;
             while(enJeu){
-                enJeu = executionCombat(player);
+                enJeu = executionCombat(player,score);
                 print(CLEAR);
                 enJeu = executionQuestion(player);
             }
         }else if(equals(choixmenu,"2")){
-    
+
         }
     }
 }
