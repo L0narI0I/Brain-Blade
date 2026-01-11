@@ -9,4 +9,5 @@ class Monstre {
     double degCrit;
     int vitesse;
     String type;
+    String fichier;
 }

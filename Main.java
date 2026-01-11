@@ -82,6 +82,16 @@ class Main extends Program {
         return saisie;
     }
 
+    void buffStatsJoueur(Player j, String difficulty){
+        for(int i = length(difficulty)-1; i>=0 , i--){
+            
+        }
+    }
+
+
+
+
+
 //---------------Fonction de combat--------------//
     
     void playerAttack(Player player, Monstre monstre){
