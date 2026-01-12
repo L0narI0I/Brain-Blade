@@ -92,6 +92,12 @@ class Main extends Program {
         return saisie;
     }
 
+    void buffStatsJoueur(Player j, String difficulty){
+        if (equals(difficulty, "facile")) { j.buffDmg += 0.05; }
+        else if (equals(difficulty, "moyen")) { j.buffDmg += 0.10; }
+        else { j.buffDmg += 0.20; }
+        j.HPcurrent = j.HPmax;
+    }
 
     int toInt (String s){
         int n =0;
@@ -109,7 +115,9 @@ class Main extends Program {
         int taille = 20;
         double pourcentage = (max > 0) ? (double) actuel / max : 0;
         int nb = (int)(pourcentage * taille);
-        if (nb < 0) nb = 0;
+        if (nb < 0) {
+            nb = 0;
+        };
         print(formater(nom, 10) + " [");
         for (int i = 0; i < taille; i++) {
             if (i < nb) print("█");
@@ -121,17 +129,22 @@ class Main extends Program {
 //---------------Fonction de combat--------------//
     
     void playerAttack(Player player, Monstre monstre){
-        double rd = (random() * 30 + 85) / 100.0;
-        double multiplier = (random() < player.txCrit) ? player.degCrit : 1.0;
-        if (multiplier > 1.0) println("COUP CRITIQUE !");
-        int dmg = (int)(((player.dmg * player.buffDmg) / (monstre.def / 5.0 + 1)) * rd * multiplier);
-        damage(monstre, (dmg < 1 ? 1 : dmg));
+        double rd = (random(85,115)) / 100.0;
+        if (random() < player.txCrit) {
+            rd += player.degCrit;
+            afficherAsciiArt("CriticImpact.txt");
+        }
+        int dmg = (int)(((player.dmg * player.buffDmg) / (monstre.def / 5.0 + 1)) * rd);
+        damage(monstre, dmg);
     }
 
     void monstreAttack(Monstre monstre, Player player){
-        double rd = (random() * 30 + 85) / 100.0;
-        int dmg = (int)(((monstre.dmg * monstre.buffDmg) / (player.def / 5.0 + 1)) * rd);
-        damage(player, (dmg < 1 ? 1 : dmg));
+        double rd = (random(85,115)) / 100.0;
+        int dmg = (int)(((monstre.dmg * monstre.buffDmg) / (player.def / 5.0 + 1)) * rd);      
+        if (dmg < 1) {
+            dmg = 1;
+        }
+        damage(player, dmg);
     }
 
     void damage(Player player, double amount){
@@ -185,7 +198,8 @@ class Main extends Program {
                            toInt(getCell(montres, rd, 2)),
                            toInt(getCell(montres, rd, 3)),
                            toInt(getCell(montres, rd, 4)),
-                           toInt(getCell(montres, rd, 5)));
+                           getCell(montres, rd, 5));
+    }
 
     boolean executionCombat(Player player, int score){
         Monstre monstre = monstreAleatoire();
