@@ -172,7 +172,18 @@ class Main extends Program {
         }
     }
 
+    Monstre monstreAleatoire(){
+        int rd = random(0,4);
+        CSVFile montres = loadCSV("monstres.csv", ',');
+        return newMonstre(getCell(montres, rd, 1).toInt(),
+                           getCell(montres, rd, 2).toInt(),
+                           getCell(montres, rd, 3).toInt(),
+                           getCell(montres, rd, 4).toInt(),
+                           getCell(montres, rd, 5).toInt());
+    }
+
     boolean executionCombat(Player player, int score){
+        int rd = random()
         Monstre monstre = newMonstre(25 + (score*5), 10 + score, 15 + score, 15, "monstre1.txt");
         print(CLEAR);
         afficherAsciiArt("StartCombat.txt");
