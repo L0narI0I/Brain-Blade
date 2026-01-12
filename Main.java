@@ -93,10 +93,28 @@ class Main extends Program {
     }
 
     void buffStatsJoueur(Player j, String difficulty){
-        if (equals(difficulty, "facile")) { j.buffDmg += 0.05; }
-        else if (equals(difficulty, "moyen")) { j.buffDmg += 0.10; }
-        else { j.buffDmg += 0.20; }
-        j.HPcurrent = j.HPmax;
+        int diff = toInt(difficulty);
+        String[] stats = new String[]{"HPmax", "Soin", "Dégats", "Défense", "Vitesse", "Taux Critique", "Dégats Critique"};
+        String choix = controleSaisie(stats, "Choisissez une statistique à améliorer : ");
+        if (equals(choix, "HP")){
+            j.HPmax += diff * 3;
+            j.HPcurrent += diff * 3;
+        } else if (equals(choix, "Soin")){
+            j.HPcurrent += diff * 5;
+            if (j.HPcurrent > j.HPmax){
+                j.HPcurrent = j.HPmax;
+            }
+        } else if (equals(choix, "Dégats")){
+            j.dmg += diff * 2;
+        } else if (equals(choix, "Défense")){
+            j.def += diff * 2;
+        } else if (equals(choix, "Vitesse")){
+            j.vitesse += diff * 1;
+        } else if (equals(choix, "Taux Critique")){
+            j.txCrit += 0.05 * diff;
+        } else if (equals(choix, "Dégats Critique")){
+            j.degCrit += 0.1 * diff;
+        }
     }
 
     int toInt (String s){
