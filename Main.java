@@ -92,29 +92,61 @@ class Main extends Program {
         return saisie;
     }
 
-    void buffStatsJoueur(Player j, String difficulty){
-        int diff = toInt(difficulty);
-        String[] stats = new String[]{"HPmax", "Soin", "Dégats", "Défense", "Vitesse", "Taux Critique", "Dégats Critique"};
-        String choix = controleSaisie(stats, "Choisissez une statistique à améliorer : ");
-        if (equals(choix, "HP")){
-            j.HPmax += diff * 3;
-            j.HPcurrent += diff * 3;
-        } else if (equals(choix, "Soin")){
-            j.HPcurrent += diff * 5;
-            if (j.HPcurrent > j.HPmax){
+void appliquerBonusStat(Player j, String choix, int multiplicateur) {
+        if (equals(choix, "HPmax")) {
+            j.HPmax += multiplicateur * 3;
+            j.HPcurrent += multiplicateur * 3;
+        } else if (equals(choix, "Soin")) {
+            j.HPcurrent += multiplicateur * 7;
+            if (j.HPcurrent > j.HPmax) {
                 j.HPcurrent = j.HPmax;
             }
-        } else if (equals(choix, "Dégats")){
-            j.dmg += diff * 2;
-        } else if (equals(choix, "Défense")){
-            j.def += diff * 2;
-        } else if (equals(choix, "Vitesse")){
-            j.vitesse += diff * 1;
-        } else if (equals(choix, "Taux Critique")){
-            j.txCrit += 0.05 * diff;
-        } else if (equals(choix, "Dégats Critique")){
-            j.degCrit += 0.1 * diff;
+        } else if (equals(choix, "Dégats")) {
+            j.dmg += multiplicateur * 2;
+        } else if (equals(choix, "Défense")) {
+            j.def += multiplicateur * 2;
+        } else if (equals(choix, "Vitesse")) {
+            j.vitesse += multiplicateur * 1;
+        } else if (equals(choix, "Taux Critique")) {
+            j.txCrit += 0.05 * multiplicateur;
+        } else if (equals(choix, "Dégats Critique")) {
+            j.degCrit += 0.1 * multiplicateur;
         }
+    }
+
+    String gererMenuAmelioration(int diff, String[] stats) {
+        String choix = "ERREUR_SAISIE";
+        String messageErreur = "";
+
+        while (equals(choix, "ERREUR_SAISIE")) {
+            print(CLEAR);
+            println("=== AMÉLIORATION DES STATISTIQUES (Bonus x" + diff + ") ===");
+            println("");
+            println("Statistiques : Soin, HP, Dégats, Défense, Vitesse, Taux Critique, Dégats Critique");
+            println("");
+            
+            if (!equals(messageErreur, "")) {
+                println("\n" + messageErreur);
+            }
+
+            choix = controleSaisie(stats, "Choisissez une statistique : ");
+
+            if (equals(choix, "ERREUR_SAISIE")) {
+                messageErreur = "Erreur : Respectez l'orthographe (ex: HPmax)";
+            }
+        }
+        return choix;
+    }
+
+    void buffStatsJoueur(Player j, String difficulty) {
+        int diff = toInt(difficulty);
+        String[] stats = new String[]{"Soin", "HP", "Dégats", "Défense", "Vitesse", "Taux Critique", "Dégats Critique"};
+        
+        String choixValide = gererMenuAmelioration(diff, stats);
+        appliquerBonusStat(j, choixValide, diff);
+        
+        println("\nAmélioration de " + choixValide + " effectuée !");
+        sleep(1500);
     }
 
     int toInt (String s){
@@ -194,7 +226,7 @@ class Main extends Program {
     }
 
     void tourDeCombat(Player p, Monstre m) {
-        String s = controleSaisie(new String[]{"1", "2"}, "Action (1:Attaque, 2:Stats)");
+        String s = controleSaisie(new String[]{"1", "2"}, "Action (1:Attaque, 2:Stats) ");
         if (equals(s, "1")) {
             playerAttack(p, m);
             if (!estKO(m)) {
@@ -212,55 +244,40 @@ class Main extends Program {
     Monstre monstreAleatoire(){
         int rd = random(0,4);
         CSVFile montres = loadCSV("monstres.csv", ',');
-        return newMonstre(toInt(getCell(montres, rd, 1)),
+        return newMonstre(toInt(getCell(montres, rd, 0)),
+                           toInt(getCell(montres, rd, 1)),
                            toInt(getCell(montres, rd, 2)),
                            toInt(getCell(montres, rd, 3)),
-                           toInt(getCell(montres, rd, 4)),
-                           getCell(montres, rd, 5));
+                           getCell(montres, rd, 4));
+    }
+
+    void appliquerBuffMonstre(Monstre m, int score) {
+        double multiplicateur = 1.0;
+        for (int i = 0; i < score; i++) {
+            multiplicateur = multiplicateur * 1.12;
+        }
+        m.HPmax = (int) (m.HPmax * multiplicateur);
+        m.HPcurrent = m.HPmax;
+        m.dmg = (int) (m.dmg * multiplicateur);
+        m.def = (int) (m.def * multiplicateur);
     }
 
     boolean executionCombat(Player player, int score){
         Monstre monstre = monstreAleatoire();
+        appliquerBuffMonstre(monstre, score);
         print(CLEAR);
         afficherAsciiArt("StartCombat.txt");
         sleep(1200);
         while (!estKO(player) && !estKO(monstre)) {
             print(CLEAR);
             afficherAnnonceCombat(player, monstre);
-            println("");
+            println("\n--- NIVEAU " + score + " ---");
             afficherBarreVie("JOUEUR", player.HPcurrent, player.HPmax);
             afficherBarreVie("MONSTRE", monstre.HPcurrent, monstre.HPmax);
-            println("");
             tourDeCombat(player, monstre);
         }
         return !estKO(player);
     }
-
-
-    void buffStatsJoueur(Player j, String diff){
-        difficulty = toInt(diff);
-        String[] stats = new String[]{"HPmax", "Soin", "Dégats", "Défense", "Vitesse", "Taux Critique", "Dégats Critique"};
-        String choix = controleSaisie(stats, "Choisissez une statistique à améliorer : ");
-        if (equals(choix, "HP")){
-            j.HPmax += difficulty * 3;
-            j.HPcurrent += difficulty * 3;
-        } else if (equals(choix, "Soin")){
-            j.HPcurrent += difficulty * 5;
-            if (j.HPcurrent > j.HPmax){
-                j.HPcurrent = j.HPmax;
-            }
-        } else if (equals(choix, "Dégats")){
-            j.dmg += difficulty * 2;
-        } else if (equals(choix, "Défense")){
-            j.def += difficulty * 2;
-        } else if (equals(choix, "Vitesse")){
-            j.vitesse += difficulty * 1;
-        } else if (equals(choix, "Taux Critique")){
-            j.txCrit += 0.05 * difficulty;
-        } else if (equals(choix, "Dégats Critique")){
-            j.degCrit += 0.1 * difficulty;
-        }
-
 
 //---------------Fonction de Quizz---------------//
 
