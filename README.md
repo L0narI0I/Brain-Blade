@@ -9,7 +9,7 @@ Durant votre quête, vous enchaînerez combats et quizz de culture générale, e
 A la fin de chaque combas ou vous survivrez, une question vous seras posée, et si vous répondez correctement, vous pourrez choisir une statisqte qui sera augmentée proportionellement à la difficulté de la question qui vous à été posée !
 
 
-Des captudes d'écran illustant les différentes interraction  du jeu avec le joueur sont disponibles dans le dossier "Captures"
+Des captudes d'écran illustant les différentes interraction  du jeu avec le joueur sont disponibles dans le dossier "captures"
 
 
 # Guide d'utilisation
