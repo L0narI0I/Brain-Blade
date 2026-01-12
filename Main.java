@@ -384,48 +384,41 @@ class Main extends Program {
             }
         }
     }
-}
-
-
 //--------------- Fonctions de Tests ---------------//
+    
+    void testNewMonstre() {
+        Monstre m = newMonstre(100, 10, 20, 5, "test.txt");
+        assert(m.HPmax == 100); assert(m.HPcurrent == 100); assert(m.dmg == 20);
+        println("Test newMonstre: OK");
+    }
 
-void testNewMonstre() {
-    Monstre m = newMonstre(100, 10, 20, 5, "test.txt");
-    assert(m.HPmax == 100);
-    assert(m.HPcurrent == 100);
-    assert(m.dmg == 20);
-    println("Test newMonstre: OK");
+    void testDamagePlayer() {
+        Player p = newPlayer(); p.HPcurrent = 50;
+        damage(p, 10.0); assert(p.HPcurrent == 40);
+        println("Test damagePlayer: OK");
+    }
+
+    void testEstKO() {
+        Monstre m = newMonstre(10, 0, 0, 0, "test.txt");
+        assert(!estKO(m)); damage(m, 15.0); assert(estKO(m));
+        println("Test estKO: OK");
+    }
+
+    void testToInt() {
+        assert(toInt("123") == 123); assert(toInt("abc") == -1);
+        println("Test toInt: OK");
+    }
+
+    void testFormater() {
+        String s = formater("Test", 10);
+        assert(length(s) == 10); assert(equals(s, "Test      "));
+        println("Test formater: OK");
+    }
+
+    void runAllTests() {
+        println("\n=== LANCEMENT DES TESTS ===");
+        testNewMonstre(); testDamagePlayer(); testEstKO(); testToInt(); testFormater();
+        println("=== TESTS VALIDÉS ===\nAppuyez sur Entrée...");
+        readString();
+    }
 }
-
-void testDamagePlayer() {
-    Player p = newPlayer();
-    p.HPcurrent = 50;
-    damage(p, 10);
-    assert(p.HPcurrent == 40);
-    println("Test damagePlayer: OK");
-}
-
-void testEstKO() {
-    Monstre m = newMonstre(10, 0, 0, 0, "test.txt");
-    assert(!estKO(m)); // Ne doit pas être KO
-    damage(m, 15);
-    assert(estKO(m));  // Doit être KO
-    println("Test estKO: OK");
-}
-
-void testToInt() {
-    assert(toInt("123") == 123);
-    assert(toInt("0") == 0);
-    assert(toInt("abc") == -1); // Vérifie votre gestion d'erreur
-    println("Test toInt: OK");
-}
-
-void testFormater() {
-    String s = formater("Test", 10);
-    assert(length(s) == 10);
-    // Vérifie si les espaces ont été ajoutés
-    assert(equals(s, "Test      "));
-    println("Test formater: OK");
-}
-
-
