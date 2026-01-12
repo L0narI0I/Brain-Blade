@@ -17,6 +17,8 @@ class Main extends Program {
         newMonstre.dmg = degat;
         newMonstre.vitesse = speed;
         newMonstre.fichier = fichier;
+        newMonstre.buffDmg = 1.0;
+        newMonstre.buffDef = 1.0;
         return newMonstre;
     }
 
@@ -27,18 +29,26 @@ class Main extends Program {
 
 //---------------Fonction Utilitaires------------//
 
+    String formater(String texte, int largeur) {
+        String resultat = texte;
+        while (length(resultat) < largeur) {
+            resultat = resultat + " ";
+        }
+        return resultat;
+    }
+
     void toStringPlayer(Player player){
         afficherAsciiArt("Character.txt");
-        println("Vos Points de vie : " + player.HPcurrent + "/" + player.HPmax + "  Vos Degat : " + player.dmg*player.buffDmg);
+        println("Vos Points de vie : " + player.HPcurrent + "/" + player.HPmax + "  Vos Degat : " + (player.dmg * player.buffDmg));
     }
 
     void toStringMonstre(Monstre monstre){
         afficherAsciiArt(monstre.fichier);
-        println("Points de vie : " + monstre.HPcurrent + "/" + monstre.HPmax + "  Degat : " + monstre.dmg*monstre.buffDmg);
+        println("Points de vie : " + monstre.HPcurrent + "/" + monstre.HPmax + "  Degat : " + (monstre.dmg * monstre.buffDmg));
     }
     
     void afficherAsciiArt(String name_file){
-        File file = newFile("./Assets/"+name_file);
+        File file = newFile("./Assets/" + name_file);
         while (ready(file)){
             println(readLine(file));
         }
@@ -48,10 +58,10 @@ class Main extends Program {
         println("");
         println("Vos Statistiques : ");
         println("   - Point de Vie : " + player.HPcurrent + "/" + player.HPmax);
-        println("   - Degat : "+player.dmg + "  x Buffs Degat : " +player.buffDmg);
-        println("   - Defense : "+player.def + "  x Buffs Defense : " +player.buffDef);
-        println("   - Vitesse : "+player.vitesse);
-        println("   - Taux Coup Critique : x"+player.txCrit + " Degats Critique : " +player.degCrit);
+        println("   - Degat : " + player.dmg + "  x Buffs Degat : " + player.buffDmg);
+        println("   - Defense : " + player.def + "  x Buffs Defense : " + player.buffDef);
+        println("   - Vitesse : " + player.vitesse);
+        println("   - Taux Coup Critique : x" + player.txCrit + " Degats Critique : " + player.degCrit);
         println("");
     }
 
@@ -59,74 +69,73 @@ class Main extends Program {
         println("");
         println("Ses Statistiques : ");
         println("   - Point de Vie : " + monstre.HPcurrent + "/" + monstre.HPmax);
-        println("   - Degat : "+monstre.dmg + "  x Buffs Degat : " +monstre.buffDmg);
-        println("   - Defense : "+monstre.def + "  x Buffs Defense : " +monstre.buffDef);
-        println("   - Vitesse : "+monstre.vitesse);
-        println("   - Taux Coup Critique : x"+monstre.txCrit + " Degats Critique : " +monstre.degCrit);
+        println("   - Degat : " + monstre.dmg + "  x Buffs Degat : " + monstre.buffDmg);
+        println("   - Defense : " + monstre.def + "  x Buffs Defense : " + monstre.buffDef);
+        println("   - Vitesse : " + monstre.vitesse);
+        println("   - Taux Coup Critique : x" + monstre.txCrit + " Degats Critique : " + monstre.degCrit);
         println("");
     }   
 
     String controleSaisie(String[] possibilite, String suplement){
         String saisie = "";
         boolean valide = false;
-        do{
-            print(suplement+">>> ");
-            saisie = readString();
-            for (int i=0 ; i<length(possibilite) ; i++){
-                if(equals(saisie , possibilite[i])){
-                    valide = true;
-                }
+        print(suplement + " >>> ");
+        saisie = readString();
+        for (int i = 0; i < length(possibilite); i++){
+            if (equals(saisie, possibilite[i])){
+                valide = true;
             }
-        }while (!valide);
-        println("");
+        }
+        if (!valide) {
+            return "ERREUR_SAISIE";
+        }
         return saisie;
     }
 
     void buffStatsJoueur(Player j, String difficulty){
-        for(int i = length(difficulty)-1; i>=0 , i--){
-            
-        }
+        if (equals(difficulty, "facile")) { j.buffDmg += 0.05; }
+        else if (equals(difficulty, "moyen")) { j.buffDmg += 0.10; }
+        else { j.buffDmg += 0.20; }
+        j.HPcurrent = j.HPmax;
     }
 
-
-
-
+    void afficherBarreVie(String nom, int actuel, int max) {
+        int taille = 20;
+        double pourcentage = (max > 0) ? (double) actuel / max : 0;
+        int nb = (int)(pourcentage * taille);
+        if (nb < 0) nb = 0;
+        print(formater(nom, 10) + " [");
+        for (int i = 0; i < taille; i++) {
+            if (i < nb) print("█");
+            else print("░");
+        }
+        println("] " + actuel + "/" + max + " HP" + "\n");
+    }
 
 //---------------Fonction de combat--------------//
     
     void playerAttack(Player player, Monstre monstre){
-        double crit = random();
-        double rd = random(85,115)/100.0;
-        if ( crit < player.txCrit){
-            println("VOUS INFLIGER UN COUP CRITIQUE !!!");
-            rd += 2;
-        }
-        double dmg = (int)((player.dmg*player.buffDmg)/(monstre.def*monstre.buffDef) * rd * 5) + 1;
-        damage(monstre, dmg);
-        println("PV du monstre restants"+monstre.HPcurrent);
+        double rd = (random() * 30 + 85) / 100.0;
+        double multiplier = (random() < player.txCrit) ? player.degCrit : 1.0;
+        if (multiplier > 1.0) println("COUP CRITIQUE !");
+        int dmg = (int)(((player.dmg * player.buffDmg) / (monstre.def / 5.0 + 1)) * rd * multiplier);
+        damage(monstre, (dmg < 1 ? 1 : dmg));
     }
 
     void monstreAttack(Monstre monstre, Player player){
-        double crit = random();
-        double rd = random(85,115);
-        rd = rd/100;
-        if ( crit < monstre.txCrit){
-            println("Le monstre se decahine et vous inflige un COUP CRITIQUE !");
-            rd += 2;
-        }
-        double dmg =(int)((monstre.dmg*monstre.buffDmg)/(player.def*player.buffDef) * rd * 5) + 1;
-        damage(player, dmg);
-        println("PV du joueurs restants"+monstre.HPcurrent);
+        double rd = (random() * 30 + 85) / 100.0;
+        int dmg = (int)(((monstre.dmg * monstre.buffDmg) / (player.def / 5.0 + 1)) * rd);
+        damage(player, (dmg < 1 ? 1 : dmg));
     }
 
     void damage(Player player, double amount){
-        player.HPcurrent -= amount;
-        println("Dégâts reçus : "+amount+"\n");
+        player.HPcurrent -= (int)amount;
+        println("Vous recevez " + amount + " dégâts !");
     }
 
     void damage(Monstre monstre, double amount){
-        monstre.HPcurrent -= amount;
-        println("Dégâts infligés : "+amount+"\n");
+        monstre.HPcurrent -= (int)amount;
+        println("Le monstre reçoit " + amount + " dégâts !");
     }
 
     boolean estKO(Monstre monstre){
@@ -141,114 +150,165 @@ class Main extends Program {
         File file_character = newFile("./Assets/Character.txt");
         File file_VS = newFile("./Assets/VS.txt");
         File file_monstre = newFile("./Assets/" + monstre.fichier);
-        String annonce = "";
-        while (ready(file_VS)){
-            annonce += readLine(file_character) + readLine(file_VS) + readLine(file_monstre) + "\n";
+        while (ready(file_character) && ready(file_VS) && ready(file_monstre)){
+            String ligne = formater(readLine(file_character), 35) + formater(readLine(file_VS), 20) + readLine(file_monstre);
+            println(ligne);
         }
-        println(annonce);
     }
 
+    void tourDeCombat(Player p, Monstre m) {
+        String s = controleSaisie(new String[]{"1", "2"}, "Action (1:Attaque, 2:Stats)");
+        if (equals(s, "1")) {
+            playerAttack(p, m);
+            if (!estKO(m)) {
+                sleep(600);
+                monstreAttack(m, p);
+            }
+            sleep(1200);
+        } else if (equals(s, "2")) {
+            afficherStat(p);
+            print("Entrée pour continuer...");
+            readString();
+        }
+    }
 
     boolean executionCombat(Player player, int score){
-        Monstre monstre = newMonstre(20,10,20,15,"monstre1.txt");
+        Monstre monstre = newMonstre(25 + (score*5), 10 + score, 15 + score, 15, "monstre1.txt");
         print(CLEAR);
         afficherAsciiArt("StartCombat.txt");
-        sleep(800);
-        println("");
-        afficherAnnonceCombat(player,monstre);
-        do{
-            String s = controleSaisie(new String[]{"1"} , "Votre action ? (1 : Attaquer) ");
-            if(equals(s,"1")){
-                println("Vous attaquez le monstre !");
-                playerAttack(player,monstre);
-                println("\n"+"Le monstre riposte !");
-                monstreAttack(monstre,player);
-            }
-        }while (!estKO(monstre) && !estKO(player));
-        if (estKO(monstre)){
-            println("Vous avez mis le monstre KO");
-            println("Votre score : " + score);
-            return true;
-        }else{
-            println("Le monstre vous a battu, FIN DE LA PARTIE");
-            return false; 
+        sleep(1200);
+        while (!estKO(player) && !estKO(monstre)) {
+            print(CLEAR);
+            afficherAnnonceCombat(player, monstre);
+            println("");
+            afficherBarreVie("JOUEUR", player.HPcurrent, player.HPmax);
+            afficherBarreVie("MONSTRE", monstre.HPcurrent, monstre.HPmax);
+            println("");
+            tourDeCombat(player, monstre);
         }
+        return !estKO(player);
     }
 
 //---------------Fonction de Quizz---------------//
 
-    boolean executionQuestion(Player player) {
+    void preparerEcranQuiz() {
+        print(CLEAR);
         afficherAsciiArt("StartQuizz.txt");
-        
-        Question q = newQuestionRandom();
-        if(afficherQuestion(q) == true){
-            return true;
-        }else{
-            return false;
+        sleep(1000);
+    }
+
+    void afficherQuestionCadree(String texte, String diff) {
+        String contenu = " QUESTION : " + texte + " ";
+        int largeur = length(contenu) + 2;
+        if (largeur < 40) { 
+            largeur = 40; 
+        }
+        println("\nDIFFICULTÉ : " + diff);
+        print("+");
+        for (int i = 0; i < largeur - 2; i++) { 
+            print("-"); 
+        }
+        println("+");
+        println("|" + formater(contenu, largeur - 2) + "|");
+        print("+");
+        for (int i = 0; i < largeur - 2; i++) { 
+            print("-"); 
+        }
+        println("+");
+    }
+
+    void afficherOptionsQuiz(String a1, String a2, String a3, String a4) {
+        println("\n1 : " + a1 + " | 2 : " + a2);
+        println("3 : " + a3 + " | 4 : " + a4);
+        println("");
+    }
+
+    String saisirReponseValide(Question q) {
+        String[] choix = new String[]{"1", "2", "3", "4"};
+        String rep = "ERREUR_SAISIE";
+        while (equals(rep, "ERREUR_SAISIE")) {
+            rep = controleSaisie(choix, "Réponse");
+            if (equals(rep, "ERREUR_SAISIE")) {
+                print(CLEAR);
+                afficherAsciiArt("StartQuizz.txt");
+                afficherQuestionCadree(q.question, q.difficulty);
+                afficherOptionsQuiz(q.answer1, q.answer2, q.answer3, q.answer4);
+                println("Choix invalide, veuillez entrer un chiffre entre 1 et 4.");
+            }
+        }
+        return rep;
+    }
+
+    boolean poserQuestionEtVerifier(Question q) {
+        afficherQuestionCadree(q.question, q.difficulty);
+        afficherOptionsQuiz(q.answer1, q.answer2, q.answer3, q.answer4);
+        String reponse = saisirReponseValide(q);
+        return equals(reponse, q.correctAnswer);
+    }
+
+    void appliquerConsequencesQuiz(Player p, boolean reussite, String diff, String solution) {
+        if (reussite) {
+            println("\n*** BRAVO ! BONNE RÉPONSE ! ***");
+            buffStatsJoueur(p, diff);
+        } else {
+            println("\n--- DOMMAGE, MAUVAISE RÉPONSE ---");
+            println("La réponse était la : " + solution);
         }
     }
 
+    boolean executionQuestion(Player player) {
+        preparerEcranQuiz();
+        Question q = newQuestionRandom();
+        boolean estCorrect = poserQuestionEtVerifier(q);
+        appliquerConsequencesQuiz(player, estCorrect, q.difficulty, q.correctAnswer);
+        sleep(2000);
+        return estCorrect;
+    }
+
     Question newQuestionRandom(){
-        
-        CSVFile tab = loadCSV("questions.csv",',');
+        CSVFile tab = loadCSV("questions.csv", ',');
+        int rd = (int)(random() * (rowCount(tab) - 1)) + 1;
         Question q = new Question();
-        int rd = random(1,20);
-
         q.question = getCell(tab, rd, 0);
-
         q.answer1 = getCell(tab, rd, 1);
         q.answer2 = getCell(tab, rd, 2);
         q.answer3 = getCell(tab, rd, 3);
         q.answer4 = getCell(tab, rd, 4);
-
         q.correctAnswer = getCell(tab, rd, 5);
-
         q.difficulty = getCell(tab, rd, 6);
-
         return q;
     }
 
-    boolean afficherQuestion(Question q){
-        String[] reponsesPossibles = new String[]{"1","2","3","4"};
-        println("QUESTION :");
-        println(q.question);
-        println("");
+//---------------Boucle Principale---------------//
 
-        println("1 : " + q.answer1);
-        println("2 : " + q.answer2);
-        println("3 : " + q.answer3);
-        println("4 : " + q.answer4);
-
-        String reponse = controleSaisie(reponsesPossibles,"Veuillez entrer votre réponse ");
-        if(equals(reponse,q.correctAnswer)){
-            return true;
-        }else{
-            return false;
+    void lancerPartie() {
+        int score = 0;
+        boolean vivant = true;
+        while(vivant) {
+            vivant = executionCombat(player, score);
+            if (vivant) {
+                score++;
+                executionQuestion(player);
+            }
         }
+        println("\nPARTIE TERMINÉE. Score final : " + score);
+        sleep(3000);
     }
 
-//-------Gestion des statistiques monstres-------//
-
-//   --> Ici toutes les fonctions pour les
-//       les stats des montres qui évoluront.
-
-
-//---------------Boucle Principale---------------//
     void algorithm() {
-        boolean enJeu = true;
-        print(CLEAR);
-        afficherAsciiArt("MainScreen.txt");
-        Player player = newPlayer();
-        int score = 0;
-        String choixmenu = controleSaisie(new String[]{"1","2","3"}, "");
-        if(equals(choixmenu,"1")){;
-            while(enJeu){
-                enJeu = executionCombat(player,score);
-                print(CLEAR);
-                enJeu = executionQuestion(player);
+        boolean continuer = true;
+        while(continuer) {
+            print(CLEAR);
+            afficherAsciiArt("MainScreen.txt");
+            String choix = controleSaisie(new String[]{"1","2","3"}, "");
+            if (equals(choix, "1")) {
+                lancerPartie();
+            } else if (equals(choix, "2")) {
+                println("\nRÈGLES : Enchaînez les combats et répondez aux quiz pour survivre !");
+                readString();
+            } else if (equals(choix, "3")) {
+                continuer = false;
             }
-        }else if(equals(choixmenu,"2")){
-
         }
     }
 }
