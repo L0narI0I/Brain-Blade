@@ -183,7 +183,7 @@ class Main extends Program {
     }
 
     boolean executionCombat(Player player, int score){
-        int rd = random()
+        int rd = random();
         Monstre monstre = newMonstre(25 + (score*5), 10 + score, 15 + score, 15, "monstre1.txt");
         print(CLEAR);
         afficherAsciiArt("StartCombat.txt");
