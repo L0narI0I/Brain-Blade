@@ -3,7 +3,7 @@ class Player {
     int HPcurrent = HPmax;
     double def = 10;
     double buffDef = 1;
-    int dmg = 20;
+    int dmg = 40;
     double buffDmg = 1;
     double txCrit = 0.25;
     double degCrit = 1.5;
