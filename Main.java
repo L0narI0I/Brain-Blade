@@ -92,11 +92,17 @@ class Main extends Program {
         return saisie;
     }
 
-    void buffStatsJoueur(Player j, String difficulty){
-        if (equals(difficulty, "facile")) { j.buffDmg += 0.05; }
-        else if (equals(difficulty, "moyen")) { j.buffDmg += 0.10; }
-        else { j.buffDmg += 0.20; }
-        j.HPcurrent = j.HPmax;
+
+    int toInt (String s){
+        int n =0;
+        for (int i = 0; i < length(s); i++){
+            if (s.charAt(i) < '0' || s.charAt(i) > '9'){
+                return -1;
+            }else{
+                n = n * 10 + (s.charAt(i) - '0');
+            }
+        }
+        return n;
     }
 
     void afficherBarreVie(String nom, int actuel, int max) {
@@ -175,16 +181,15 @@ class Main extends Program {
     Monstre monstreAleatoire(){
         int rd = random(0,4);
         CSVFile montres = loadCSV("monstres.csv", ',');
-        return newMonstre(getCell(montres, rd, 1).toInt(),
-                           getCell(montres, rd, 2).toInt(),
-                           getCell(montres, rd, 3).toInt(),
-                           getCell(montres, rd, 4).toInt(),
-                           getCell(montres, rd, 5).toInt());
+        return newMonstre(toInt(getCell(montres, rd, 1)),
+                           toInt(getCell(montres, rd, 2)),
+                           toInt(getCell(montres, rd, 3)),
+                           toInt(getCell(montres, rd, 4)),
+                           getCell(montres, rd, 5));
     }
 
     boolean executionCombat(Player player, int score){
-        int rd = random();
-        Monstre monstre = newMonstre(25 + (score*5), 10 + score, 15 + score, 15, "monstre1.txt");
+        Monstre monstre = monstreAleatoire();
         print(CLEAR);
         afficherAsciiArt("StartCombat.txt");
         sleep(1200);
