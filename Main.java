@@ -185,8 +185,7 @@ class Main extends Program {
                            toInt(getCell(montres, rd, 2)),
                            toInt(getCell(montres, rd, 3)),
                            toInt(getCell(montres, rd, 4)),
-                           getCell(montres, rd, 5));
-    }
+                           toInt(getCell(montres, rd, 5)));
 
     boolean executionCombat(Player player, int score){
         Monstre monstre = monstreAleatoire();
