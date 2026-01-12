@@ -48,7 +48,7 @@ class Main extends Program {
     }
     
     void afficherAsciiArt(String name_file){
-        File file = newFile("../Assets/" + name_file);
+        File file = newFile("../ressources/" + name_file);
         while (ready(file)){
             println(readLine(file));
         }
@@ -184,9 +184,9 @@ class Main extends Program {
     }
 
     void afficherAnnonceCombat(Player player, Monstre monstre){
-        File file_character = newFile("../Assets/Character.txt");
-        File file_VS = newFile("../Assets/VS.txt");
-        File file_monstre = newFile("../Assets/" + monstre.fichier);
+        File file_character = newFile("../ressources/Character.txt");
+        File file_VS = newFile("../ressources/VS.txt");
+        File file_monstre = newFile("../ressources/" + monstre.fichier);
         while (ready(file_character) && ready(file_VS) && ready(file_monstre)){
             String ligne = formater(readLine(file_character), 35) + formater(readLine(file_VS), 20) + readLine(file_monstre);
             println(ligne);
