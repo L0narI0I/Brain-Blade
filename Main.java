@@ -204,6 +204,32 @@ class Main extends Program {
         return !estKO(player);
     }
 
+
+    void buffStatsJoueur(Player j, String diff){
+        difficulty = toInt(diff);
+        String[] stats = new String[]{"HPmax", "Soin", "Dégats", "Défense", "Vitesse", "Taux Critique", "Dégats Critique"};
+        String choix = controleSaisie(stats, "Choisissez une statistique à améliorer : ");
+        if (equals(choix, "HP")){
+            j.HPmax += difficulty * 3;
+            j.HPcurrent += difficulty * 3;
+        } else if (equals(choix, "Soin")){
+            j.HPcurrent += difficulty * 5;
+            if (j.HPcurrent > j.HPmax){
+                j.HPcurrent = j.HPmax;
+            }
+        } else if (equals(choix, "Dégats")){
+            j.dmg += difficulty * 2;
+        } else if (equals(choix, "Défense")){
+            j.def += difficulty * 2;
+        } else if (equals(choix, "Vitesse")){
+            j.vitesse += difficulty * 1;
+        } else if (equals(choix, "Taux Critique")){
+            j.txCrit += 0.05 * difficulty;
+        } else if (equals(choix, "Dégats Critique")){
+            j.degCrit += 0.1 * difficulty;
+        }
+
+
 //---------------Fonction de Quizz---------------//
 
     void preparerEcranQuiz() {
