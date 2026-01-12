@@ -79,7 +79,7 @@ class Main extends Program {
     String controleSaisie(String[] possibilite, String suplement){
         String saisie = "";
         boolean valide = false;
-        print(suplement + " >>> ");
+        print(suplement + ">>> ");
         saisie = readString();
         for (int i = 0; i < length(possibilite); i++){
             if (equals(saisie, possibilite[i])){
