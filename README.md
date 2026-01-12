@@ -16,7 +16,7 @@ Des captudes d'écran illustant les différentes interraction  du jeu avec le jo
 
 Pour pouvoir jouer à Brain and Blade, nous vous invitons à suivre les étapes suivantes ;
 
-dans le teminal, depuis le répertoire "Brain-Blade", entrez la commande:
+dans le teminal, depuis le fichier src du répertoire "Brain-Blade", entrez la commande:
 > ijava compile Main.java
 
 suivie de la commande :
